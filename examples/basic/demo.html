@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>based-blob — Basic Demo</title>
+    <style>
+        body {
+            font-family: system-ui, Arial;
+            padding: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+        }
+
+        .row {
+            margin-top: 12px;
+        }
+
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>based-blob — Basic Demo</h1>
+
+    <label>Text to convert to Blob:</label>
+    <textarea id="text">hello world</textarea>
+
+    <div class="row">
+        <label>Content type: <input id="type" value="text/plain"></label>
+    </div>
+
+    <div class="row">
+        <button id="toBlob">Create Blob</button>
+        <button id="toBase64">Convert Blob → base64 data URL</button>
+    </div>
+
+    <div class="row">
+        <strong>Blob info:</strong>
+        <div id="blobInfo" class="mono">(none)</div>
+    </div>
+
+    <div class="row">
+        <strong>Base64 data URL:</strong>
+        <div id="b64" class="mono">(none)</div>
+    </div>
+
+    <script>
+        // Minimal implementations (equivalent to the library) so the demo runs without bundling.
+        function toBlob(base64, contentType = '') {
+            const sliceSize = 1024;
+            const byteCharacters = atob(base64);
+            const slicesCount = Math.ceil(byteCharacters.length / sliceSize);
+            const byteArrays = [];
+
+            for (let sliceIndex = 0; sliceIndex < slicesCount; sliceIndex++) {
+                const begin = sliceIndex * sliceSize;
+                const end = Math.min(begin + sliceSize, byteCharacters.length);
+                const bytes = new Array(end - begin);
+
+                for (let offset = begin, i = 0; offset < end; i++, offset++) {
+                    bytes[i] = byteCharacters[offset].charCodeAt(0);
+                }
+
+                byteArrays.push(new Uint8Array(bytes));
+            }
+
+            return new Blob(byteArrays, { type: contentType });
+        }
+
+        function toBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    if (typeof reader.result === 'string') resolve(reader.result);
+                    else reject(new Error('failed to read'));
+                };
+                reader.onerror = () => reject(new Error('file read error'));
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // Helpers to create base64 from text using btoa + data URL building
+        function textToBase64Data(text, type) {
+            const utf8encoder = new TextEncoder();
+            const bytes = utf8encoder.encode(text);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            const b64 = btoa(binary);
+            return `data:${type};base64,${b64}`;
+        }
+
+        function stripDataPrefix(dataUrl) {
+            const comma = dataUrl.indexOf(',');
+            return comma === -1 ? dataUrl : dataUrl.slice(comma + 1);
+        }
+
+        let currentBlob = null;
+
+        document.getElementById('toBlob').addEventListener('click', () => {
+            const text = document.getElementById('text').value;
+            const type = document.getElementById('type').value || '';
+            const dataUrl = textToBase64Data(text, type);
+            const rawBase64 = stripDataPrefix(dataUrl);
+            currentBlob = toBlob(rawBase64, type);
+            document.getElementById('blobInfo').textContent = `size=${currentBlob.size}, type=${currentBlob.type}`;
+            document.getElementById('b64').textContent = '(none)';
+        });
+
+        document.getElementById('toBase64').addEventListener('click', async () => {
+            if (!currentBlob) {
+                alert('Create a Blob first');
+                return;
+            }
+            const dataUrl = await toBase64(currentBlob);
+            document.getElementById('b64').textContent = dataUrl;
+        });
+    </script>
+</body>
+
+</html>
