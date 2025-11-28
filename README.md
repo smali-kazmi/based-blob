@@ -34,6 +34,8 @@ Converts a base64 data url string to a blob.
 # based-blob
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+[![npm version](https://img.shields.io/npm/v/based-blob.svg)](https://www.npmjs.com/package/based-blob)
+[![npm downloads](https://img.shields.io/npm/dw/based-blob.svg)](https://www.npmjs.com/package/based-blob)
 
 Convert blobs to and from base64 data URL strings.
 
