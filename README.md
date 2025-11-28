@@ -5,7 +5,7 @@ Alternate of https://github.com/Xyfir/based-blob (DELETED somehow from both npm 
 
 ```js
 (async function() {
-  const b = require('based-blob');
+  const b = require('based-blob-js');
 
   const base64String = 'some base64 data...';
 
@@ -31,7 +31,7 @@ Converts a base64 data url string to a blob.
 
 `Blob` - The blob built from the base64 string.
 
-# based-blob
+# based-blob-js
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 [![npm version](https://img.shields.io/npm/v/based-blob-js.svg)](https://www.npmjs.com/package/based-blob-js)
@@ -43,13 +43,13 @@ This project is written in TypeScript. The published package includes compiled J
 
 ## Quick Start
 
-- Install: `npm install based-blob`
+- Install: `npm install based-blob-js`
 - Build (from source): `npm run build` (compiles `src/` → `dist/`)
 
 ## Usage (CommonJS)
 
 ```js
-const { toBlob, toBase64 } = require('based-blob');
+const { toBlob, toBase64 } = require('based-blob-js');
 
 // toBlob expects raw base64 (no data: prefix)
 const blob = toBlob('aGVsbG8=', 'text/plain');
@@ -63,7 +63,7 @@ const blob = toBlob('aGVsbG8=', 'text/plain');
 ## Usage (ES Module / TypeScript)
 
 ```ts
-import { toBlob, toBase64 } from 'based-blob';
+import { toBlob, toBase64 } from 'based-blob-js';
 
 const blob = toBlob('aGVsbG8=', 'text/plain');
 const dataUrl = await toBase64(blob);
