@@ -1,0 +1,45 @@
+{
+  "name": "based-blob",
+  "version": "1.0.0",
+  "description": "Convert blobs from and to base64 data url strings.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "prepublish": "npm run build",
+    "clean": "rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smali-kazmi/based-blob.git"
+  },
+  "keywords": [
+    "blob",
+    "base64",
+    "string",
+    "convert",
+    "conversion"
+  ],
+  "author": "SM@K <smali.kazmi@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smali-kazmi/based-blob/issues"
+  },
+  "homepage": "https://github.com/smali-kazmi/based-blob#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.25",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "typescript": "^5.9.3"
+  }
+}
